@@ -39,11 +39,26 @@ enum CalculatorButton: String{
             return Color.numberButtonColor
         }
     }
+    
+    var buttonClickColor: Color {
+        switch self {
+        case .divide, .equal, .plus, .minus, .multiple:
+            return Color.arithmeticClickedButtonColor
+        case .negative, .modular, .clear:
+            return Color.calcuClickedButtonColor
+        default:
+            return Color.numberClickedButtonColor
+        }
+    }
 }
 
 extension Color {
     static let numberButtonColor = Color(hex: "#333333")
     static let calcuButtonColor = Color(hex: "#A5A5A5")
+    static let calcuClickedButtonColor = Color(hex: "#D9D9D9")
+    static let numberClickedButtonColor = Color(hex: "#A6A6A6")
+    static let arithmeticClickedButtonColor = Color(hex: "#FBC78D")
+    
     
     init(hex: String) {
         let scanner = Scanner(string: hex)
