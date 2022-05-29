@@ -48,7 +48,7 @@ struct CalculatorView: View {
                                                 buttonText(buttonItem)
                                                     .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: buttonTextAlignment(buttonItem))
                                                     .foregroundColor(buttonTextColor(buttonItem))
-                                                    .font(.system(size: calcuFontSize(buttonItem), weight: .medium))
+                                                    .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
                                             }
                                         }
                                 }
@@ -137,6 +137,18 @@ struct CalculatorView: View {
             return 35
         default:
             return 45
+        }
+    }
+    
+    // 버튼내부 텍스트의 폰트 굵기 설정하는 함수
+    func calcuFontWeight(_ item: CalculatorButton) -> Font.Weight {
+        switch item {
+        case .negative, .modular, .clear:
+            return .medium
+        case .divide, .multiple, .minus, .plus, .equal:
+            return .semibold
+        default:
+            return .regular
         }
     }
 }
