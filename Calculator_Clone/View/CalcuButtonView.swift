@@ -1,64 +1,28 @@
 //
-//  ContentView.swift
+//  CalcuButtonView.swift
 //  Calculator_Clone
 //
-//  Created by Hong jeongmin on 2022/05/27.
+//  Created by Hong jeongmin on 2022/05/29.
 //
 
 import SwiftUI
 
-struct CalculatorView: View {
+struct CalcuButtonView: View {
     
-    @State private var result = "0"
-    
-    let calcuButton: [[CalculatorButton]] = [
-        [.clear, .negative, .modular, .divide],
-        [.seven, .eight, .nine, .multiple],
-        [.four, .five, .six, .minus],
-        [.one, .two, .three, .plus],
-        [.zero, .dot, .equal]
-    ]
+    let buttonItem: CalculatorButton
     
     var body: some View {
-        ZStack{
-            Color.black.ignoresSafeArea(.all)
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Text(result)
-                        .foregroundColor(.white)
-                        .font(.system(size: 100))
-                        .fontWeight(.light)
+        RoundedRectangle(cornerRadius: 50)
+            .frame(width:calcuWidth(buttonItem), height: calcuHeight())
+            .foregroundColor(buttonItem.buttonColor)
+            .overlay(){
+                HStack{
+                    buttonText(buttonItem)
+                        .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: buttonTextAlignment(buttonItem))
+                        .foregroundColor(buttonTextColor(buttonItem))
+                        .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
                 }
-                .padding()
-                
-                VStack {
-                    ForEach(calcuButton, id:\.self) { row in
-                        HStack(spacing: 12) {
-                            ForEach(row, id:\.self) { buttonItem in
-                                Button(action: {
-                                    // 기능 구현
-                                }) {
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .frame(width:calcuWidth(buttonItem), height: calcuHeight())
-                                        .foregroundColor(buttonItem.buttonColor)
-                                        .overlay(){
-                                            HStack{
-                                                buttonText(buttonItem)
-                                                    .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: buttonTextAlignment(buttonItem))
-                                                    .foregroundColor(buttonTextColor(buttonItem))
-                                                    .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                    }
-                }
-                .padding(.bottom, 30)
             }
-        }
     }
     
     // 버튼의 너비를 계산하는 함수
@@ -150,11 +114,5 @@ struct CalculatorView: View {
         default:
             return .regular
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalculatorView()
     }
 }

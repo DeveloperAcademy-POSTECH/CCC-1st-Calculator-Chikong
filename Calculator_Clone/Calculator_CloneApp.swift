@@ -11,7 +11,7 @@ import SwiftUI
 struct Calculator_CloneApp: App {
     var body: some Scene {
         WindowGroup {
-            CalculatorView()
+            MainView()
         }
     }
 }
