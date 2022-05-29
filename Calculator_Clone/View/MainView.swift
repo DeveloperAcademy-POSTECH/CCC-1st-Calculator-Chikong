@@ -28,7 +28,7 @@ struct MainView: View {
                 VStack {
                     CalculatorView()
                 }
-                .padding(.bottom, 30)
+                .padding(.bottom, 45)
             }
         }
     }

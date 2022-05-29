@@ -13,6 +13,7 @@ struct CalcuButtonView: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 50)
+            .padding(0.5)
             .frame(width:calcuWidth(buttonItem), height: calcuHeight())
             .foregroundColor(buttonItem.buttonColor)
             .overlay(){
