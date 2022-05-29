@@ -48,7 +48,7 @@ struct CalculatorView: View {
                                                 buttonText(buttonItem)
                                                     .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: buttonTextAlignment(buttonItem))
                                                     .foregroundColor(buttonTextColor(buttonItem))
-                                                    .font(.system(size: 30))
+                                                    .font(.system(size: calcuFontSize(buttonItem), weight: .medium))
                                             }
                                         }
                                 }
@@ -65,7 +65,7 @@ struct CalculatorView: View {
     func calcuWidth(_ item: CalculatorButton) -> CGFloat {
         switch item {
         case .zero:
-            return ((UIScreen.main.bounds.width - (4 * 12)) / 4) * 2 + 5
+            return ((UIScreen.main.bounds.width - (4 * 12)) / 4) * 2 + 6
         default:
             return (UIScreen.main.bounds.width - (5 * 12)) / 4
         }
@@ -86,7 +86,7 @@ struct CalculatorView: View {
         return (UIScreen.main.bounds.width - (5 * 12)) / 4
     }
     
-    // 버튼의 글자를 설정하는 함수 ( SF 심볼의 경우와 일반 Text인 경우 )
+    // 버튼의 텍스트를 설정하는 함수 ( SF 심볼의 경우와 일반 Text인 경우 )
     func buttonText(_ item: CalculatorButton) -> Text {
         switch item {
         case .negative:
@@ -108,7 +108,7 @@ struct CalculatorView: View {
         }
     }
     
-    // 버튼 내부 글씨를 설정하는 함수
+    // 버튼 내부 텍스트를 설정하는 함수
     func buttonTextColor(_ item: CalculatorButton) -> Color {
         switch item {
         case .clear, .negative, .modular:
@@ -125,6 +125,18 @@ struct CalculatorView: View {
             return .leading
         default:
             return .center
+        }
+    }
+    
+    // 버튼내부 텍스트의 폰트 사이즈 설정하는 함수
+    func calcuFontSize(_ item: CalculatorButton) -> CGFloat {
+        switch item {
+        case .negative, .modular:
+            return 30
+        case .clear, .divide, .multiple, .minus, .plus, .equal:
+            return 35
+        default:
+            return 45
         }
     }
 }
