@@ -23,11 +23,34 @@ struct CalculatorView: View {
                 ForEach(row, id:\.self) { buttonItem in
                     Button(action: {
                         // 기능 구현
-                    }) {
-                        CalcuButtonView(buttonItem: buttonItem)
-                    }
+                    }, label: {
+                        buttonText(buttonItem)
+                    })
+                    .buttonStyle(CustomButton(buttonItem: buttonItem))
                 }
             }
+        }
+    }
+    
+    // 버튼의 텍스트를 설정하는 함수 ( SF 심볼의 경우와 일반 Text인 경우 )
+    func buttonText(_ item: CalculatorButton) -> Text {
+        switch item {
+        case .negative:
+            return Text(Image(systemName: "plus.forwardslash.minus"))
+        case .plus:
+            return Text(Image(systemName: "plus"))
+        case .minus:
+            return Text(Image(systemName: "minus"))
+        case .multiple:
+            return Text(Image(systemName: "multiply"))
+        case .divide:
+            return Text(Image(systemName: "divide"))
+        case .equal:
+            return Text(Image(systemName: "equal"))
+        case .modular:
+            return Text(Image(systemName: "percent"))
+        default:
+            return Text("\(item.rawValue)")
         }
     }
 }

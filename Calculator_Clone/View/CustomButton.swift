@@ -7,23 +7,33 @@
 
 import SwiftUI
 
-struct CalcuButtonView: View {
+struct CustomButton: ButtonStyle {
     
     let buttonItem: CalculatorButton
     
-    var body: some View {
-        RoundedRectangle(cornerRadius: 50)
-            .padding(0.5)
-            .frame(width:calcuWidth(buttonItem), height: calcuHeight())
-            .foregroundColor(buttonItem.buttonColor)
-            .overlay(){
-                HStack{
-                    buttonText(buttonItem)
-                        .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: buttonTextAlignment(buttonItem))
-                        .foregroundColor(buttonTextColor(buttonItem))
-                        .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
-                }
-            }
+    func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: .center)
+            .padding(.trailing, calcuPaddingLength(buttonItem))
+            .foregroundColor(buttonTextColor(buttonItem))
+            .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
+            .background(
+                RoundedRectangle(cornerRadius: 50)
+                    .padding(0.5)
+                    .frame(width:calcuWidth(buttonItem), height: calcuHeight())
+                    .foregroundColor(configuration.isPressed ? buttonItem.buttonClickColor : buttonItem.buttonColor)
+            )
+        }
+    
+    // "0" 일때 별도의 패딩을 지정 하기 위한 함수
+    func calcuPaddingLength(_ item: CalculatorButton) -> CGFloat {
+        switch item {
+        case .zero:
+            return 72
+        default:
+            return 0
+        }
     }
     
     // 버튼의 너비를 계산하는 함수
@@ -51,28 +61,6 @@ struct CalcuButtonView: View {
         return (UIScreen.main.bounds.width - (5 * 12)) / 4
     }
     
-    // 버튼의 텍스트를 설정하는 함수 ( SF 심볼의 경우와 일반 Text인 경우 )
-    func buttonText(_ item: CalculatorButton) -> Text {
-        switch item {
-        case .negative:
-            return Text(Image(systemName: "plus.forwardslash.minus"))
-        case .plus:
-            return Text(Image(systemName: "plus"))
-        case .minus:
-            return Text(Image(systemName: "minus"))
-        case .multiple:
-            return Text(Image(systemName: "multiply"))
-        case .divide:
-            return Text(Image(systemName: "divide"))
-        case .equal:
-            return Text(Image(systemName: "equal"))
-        case .modular:
-            return Text(Image(systemName: "percent"))
-        default:
-            return Text("\(item.rawValue)")
-        }
-    }
-    
     // 버튼 내부 텍스트를 설정하는 함수
     func buttonTextColor(_ item: CalculatorButton) -> Color {
         switch item {
@@ -80,16 +68,6 @@ struct CalcuButtonView: View {
             return .black
         default:
             return .white
-        }
-    }
-    
-    // 버튼 내부 텍스트의 정렬을 계산
-    func buttonTextAlignment(_ item: CalculatorButton) -> Alignment {
-        switch item {
-        case .zero:
-            return .leading
-        default:
-            return .center
         }
     }
     
