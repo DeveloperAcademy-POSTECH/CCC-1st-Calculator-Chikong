@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CalculatorView: View {
     
+    @EnvironmentObject var calculatorData: CalculatorData
+    
     let calcuButton: [[CalculatorButton]] = [
         [.clear, .negative, .modular, .divide],
         [.seven, .eight, .nine, .multiple],
