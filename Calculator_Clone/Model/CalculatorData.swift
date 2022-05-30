@@ -12,9 +12,7 @@ class CalculatorData: ObservableObject {
     @Published var numberConv = ""
     @Published var formula = ""
     @Published var op = ""
-    
-    @Published var isClear = true
-    
+        
     private let numberFormatter = NumberFormatter()
     
     // +/-
