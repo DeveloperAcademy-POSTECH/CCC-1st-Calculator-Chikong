@@ -25,6 +25,7 @@ struct CalculatorView: View {
                 ForEach(row, id:\.self) { buttonItem in
                     Button(action: {
                         // 기능 구현
+                        buttonClicked(buttonItem)
                     }, label: {
                         buttonText(buttonItem)
                     })
@@ -34,9 +35,31 @@ struct CalculatorView: View {
         }
     }
     
+    // 버튼 클릭 기능 처리
+    func buttonClicked(_ item: CalculatorButton) {
+        switch item {
+        case .clear:
+            calculatorData.formulaInit()
+        case .dot:
+            calculatorData.dotSet()
+        case .plus, .minus, .divide, .multiple:
+                calculatorData.operatorSet(item)
+        case .equal:
+            calculatorData.calcuResult()
+        case .modular:
+            calculatorData.modular()
+        case .negative:
+            calculatorData.negativeSet()
+        default:
+            calculatorData.clickedNumber(item)
+        }
+    }
+    
     // 버튼의 텍스트를 설정하는 함수 ( SF 심볼의 경우와 일반 Text인 경우 )
     func buttonText(_ item: CalculatorButton) -> Text {
         switch item {
+        case .clear:
+            return calculatorData.clearToCalcu() ? Text("\(item.rawValue)") : Text("C")
         case .negative:
             return Text(Image(systemName: "plus.forwardslash.minus"))
         case .plus:
