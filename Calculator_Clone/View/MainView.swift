@@ -20,8 +20,9 @@ struct MainView: View {
                     Spacer()
                     Text(calculatorData.valueText)
                         .foregroundColor(.white)
-                        .font(.system(size: 100))
+                        .font(.system(size: 95))
                         .fontWeight(.light)
+                        .minimumScaleFactor(0.5)
                 }
                 .padding()
                 
@@ -36,6 +37,6 @@ struct MainView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView().environmentObject(CalculatorData())
     }
 }
