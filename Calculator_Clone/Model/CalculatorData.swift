@@ -12,7 +12,9 @@ class CalculatorData: ObservableObject {
     @Published var numberConv = ""
     @Published var formula = ""
     @Published var op = ""
-        
+    @Published var isEqual = false
+    
+    var currentOp = ""
     private let numberFormatter = NumberFormatter()
     
     // +/-
@@ -36,12 +38,32 @@ class CalculatorData: ObservableObject {
     
     // .equal
     func calcuResult() {
-        formula += numberConv
         
+        isEqual = true
+        
+        if formulaLastOperator(formula) {
+            formula += numberConv
+        } else {
+            formula += currentOp
+            formula += numberConv
+        }
+
         let expression = NSExpression(format:formula)
         let value = expression.expressionValue(with: nil, context: nil) as? Double
         
         numberFormat(String(value!))
+    }
+    
+    // 계산식 마지막 연산자 확인
+    func formulaLastOperator(_ calcuformula: String) -> Bool {
+        guard !calcuformula.isEmpty else { return false }
+        
+        switch calcuformula.last! {
+        case "/", "*", "-", "+":
+            return true
+        default:
+            return false
+        }
     }
     
     // .dot
@@ -49,7 +71,6 @@ class CalculatorData: ObservableObject {
         guard !numberConv.contains(".") else { return }
         numberConv = numberConv.isEmpty ? "0." : numberConv + "."
         numberFormat(numberConv)
-        print(numberConv)
     }
     
     // .plus, .minus, .multiple, .divide
@@ -66,11 +87,22 @@ class CalculatorData: ObservableObject {
         default:
             return
         }
+
+        currentOp = op
+
+        if numberConv.isEmpty {
+            numberConv = "0"
+        }
         
         if !numberConv.isEmpty {
+            if isEqual {
+                formula += op
+                isEqual = false
+                
+            } else {
             formula = formula + numberConv + op
+            }
         }
-        numberConv = ""
     }
     
     // 3자리 마다 숫자를 찍기 위한 함수
@@ -90,13 +122,19 @@ class CalculatorData: ObservableObject {
         numberConv = ""
         formula = ""
         op = ""
+        isEqual = false
     }
     
     // 숫자 버튼 클릭시 적용되는 함수 ( 코드가 너무 가독성이 떨어져서 수정할 필요성을 느낌 )
     func clickedNumber(_ item: CalculatorButton) {
         guard numberConv.count < 9 else { return }
         
-        if numberConv.isEmpty {
+        if !op.isEmpty {
+            numberConv = item.rawValue
+            withAnimation() {
+                op = ""
+            }
+        } else if numberConv.isEmpty {
             if item != .zero {
                 numberConv = item.rawValue
             }

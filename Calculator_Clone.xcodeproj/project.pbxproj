@@ -137,6 +137,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = A391B89C2840B18F004A27E4;
 			productRefGroup = A391B8A62840B18F004A27E4 /* Products */;
