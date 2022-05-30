@@ -12,6 +12,7 @@ struct Calculator_CloneApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environmentObject(CalculatorData())
         }
     }
 }
