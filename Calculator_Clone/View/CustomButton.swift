@@ -30,7 +30,7 @@ struct CustomButton: ButtonStyle {
     func calcuPaddingLength(_ item: CalculatorButton) -> CGFloat {
         switch item {
         case .zero:
-            return 72
+            return 68
         default:
             return 0
         }
