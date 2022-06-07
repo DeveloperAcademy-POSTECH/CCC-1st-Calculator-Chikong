@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CalculatorView: View {
     
-    @EnvironmentObject var calculatorData: CalculatorData
+    @EnvironmentObject var calculatorModel: CalculatorModel
     
     let calcuButton: [[CalculatorButton]] = [
-        [.clear, .negative, .modular, .divide],
+        [.clear, .negative, .percent, .divide],
         [.seven, .eight, .nine, .multiple],
         [.four, .five, .six, .minus],
         [.one, .two, .three, .plus],
@@ -39,19 +39,19 @@ struct CalculatorView: View {
     func buttonClicked(_ item: CalculatorButton) {
         switch item {
         case .clear:
-            calculatorData.formulaInit()
+            calculatorModel.setClear()
         case .dot:
-            calculatorData.dotSet()
+            calculatorModel.clickedDotButton()
         case .plus, .minus, .divide, .multiple:
-                calculatorData.operatorSet(item)
+            calculatorModel.clickedOperatorButton(item)
         case .equal:
-            calculatorData.calcuResult()
-        case .modular:
-            calculatorData.modular()
+            calculatorModel.errorCheck ? calculatorModel.valueText = "오류" : calculatorModel.clickedEqualButton()
+        case .percent:
+            calculatorModel.clickedPercentButton()
         case .negative:
-            calculatorData.negativeSet()
+            calculatorModel.clickedNegativeButton()
         default:
-            calculatorData.clickedNumber(item)
+            calculatorModel.isDot ? calculatorModel.clickedNumberButtonActiveDot(item) : calculatorModel.clickedNumberButton(item)
         }
     }
     
@@ -59,7 +59,7 @@ struct CalculatorView: View {
     func buttonText(_ item: CalculatorButton) -> Text {
         switch item {
         case .clear:
-            return calculatorData.clearToCalcu() ? Text("\(item.rawValue)") : Text("C")
+            return calculatorModel.checkClear() ? Text("\(item.rawValue)") : Text("C")
         case .negative:
             return Text(Image(systemName: "plus.forwardslash.minus"))
         case .plus:
@@ -72,7 +72,7 @@ struct CalculatorView: View {
             return Text(Image(systemName: "divide"))
         case .equal:
             return Text(Image(systemName: "equal"))
-        case .modular:
+        case .percent:
             return Text(Image(systemName: "percent"))
         default:
             return Text("\(item.rawValue)")
