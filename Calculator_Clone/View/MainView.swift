@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MainView: View {
-    
     @EnvironmentObject var calculatorModel: CalculatorModel
     
     var body: some View {
@@ -23,6 +23,7 @@ struct MainView: View {
                         .font(.system(size: 95))
                         .fontWeight(.light)
                         .minimumScaleFactor(0.5)
+                        .textSelection(.enabled)
                 }
                 .padding()
                 .gesture(
