@@ -8,21 +8,23 @@
 import SwiftUI
 
 struct CustomButton: ButtonStyle {
+    @EnvironmentObject var calculatorModel: CalculatorModel
     
     let buttonItem: CalculatorButton
+    let currentOp: String
     
     func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
             .frame(width: calcuTextWidth(buttonItem), height: calcuHeight(), alignment: .center)
             .padding(.trailing, calcuPaddingLength(buttonItem))
-            .foregroundColor(buttonTextColor(buttonItem))
+            .foregroundColor(currentOp == calculatorModel.oper ? .orange : buttonTextColor(buttonItem))
             .font(.system(size: calcuFontSize(buttonItem), weight: calcuFontWeight(buttonItem)))
             .background(
                 RoundedRectangle(cornerRadius: 50)
                     .padding(0.5)
                     .frame(width:calcuWidth(buttonItem), height: calcuHeight())
-                    .foregroundColor(configuration.isPressed ? buttonItem.buttonClickColor : buttonItem.buttonColor)
+                    .foregroundColor(configuration.isPressed ? buttonItem.buttonClickColor : calculatorModel.oper == currentOp ? .white : buttonItem.buttonColor)
             )
         }
     

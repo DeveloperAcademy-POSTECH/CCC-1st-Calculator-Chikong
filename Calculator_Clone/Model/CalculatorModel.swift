@@ -15,11 +15,11 @@ class CalculatorModel: ObservableObject {
     @Published var errorCheck = false
     @Published var isDrag = false
     @Published var isEqual = false
+    @Published var oper: String = ""
     
     var numStack = [Double]()
-    var opStack = ""
     var number: Double = 0
-    var oper: String = ""
+    var opStack = ""
     var dotCheckNumber: Double = 10
     var opCheck = false
     var currentOp = ""

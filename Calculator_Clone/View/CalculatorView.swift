@@ -29,7 +29,7 @@ struct CalculatorView: View {
                     }, label: {
                         buttonText(buttonItem)
                     })
-                    .buttonStyle(CustomButton(buttonItem: buttonItem))
+                    .buttonStyle(CustomButton(buttonItem: buttonItem, currentOp: buttonItem.rawValue))
                 }
             }
         }
