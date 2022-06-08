@@ -1,14 +1,14 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  Calculator_Clone
 //
 //  Created by Hong jeongmin on 2022/05/27.
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MainView: View {
-    
     @EnvironmentObject var calculatorModel: CalculatorModel
     
     var body: some View {
@@ -23,8 +23,19 @@ struct MainView: View {
                         .font(.system(size: 95))
                         .fontWeight(.light)
                         .minimumScaleFactor(0.5)
+                        .textSelection(.enabled)
                 }
                 .padding()
+                .gesture(
+                    DragGesture()
+                        .onChanged{ _ in
+                            calculatorModel.dragNumberEditing()
+                            calculatorModel.isDrag = true
+                        }
+                        .onEnded { _ in
+                            calculatorModel.isDrag = false
+                        }
+                )
                 
                 VStack {
                     CalculatorView()
