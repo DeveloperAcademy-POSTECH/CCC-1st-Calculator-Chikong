@@ -13,6 +13,8 @@ class CalculatorModel: ObservableObject {
     @Published var isNegative = false
     @Published var isDot = false
     @Published var errorCheck = false
+    @Published var isDrag = false
+    @Published var isEqual = false
     
     var numStack = [Double]()
     var opStack = ""
@@ -37,6 +39,7 @@ class CalculatorModel: ObservableObject {
         opCheck = false
         currentOp = ""
         errorCheck = false
+        isEqual = false
     }
     
     // number 와 op 스택 추가 및 초기화 함수
@@ -144,7 +147,7 @@ class CalculatorModel: ObservableObject {
         if currentOp == "*" || currentOp == "/" {
             numStack.append(self.number)
         }
-        
+        self.isEqual = true
         updateText(numStack.first!)
     }
     
@@ -197,5 +200,22 @@ class CalculatorModel: ObservableObject {
         default:
             valueText = String(format: "%g", self.number)
         }
+    }
+    
+    func dragNumberEditing() {
+        guard !self.isDrag && !self.isEqual else { return }
+    
+        var removeFomatterNum = valueText.filter { item in
+            return item != ","
+        }
+        
+        switch removeFomatterNum.removeLast() {
+        case ".":
+            isDot = false
+        default:
+            self.number = Double(removeFomatterNum) ?? 0
+        }
+        
+        updateText(self.number)
     }
 }

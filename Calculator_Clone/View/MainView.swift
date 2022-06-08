@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  Calculator_Clone
 //
 //  Created by Hong jeongmin on 2022/05/27.
@@ -25,6 +25,16 @@ struct MainView: View {
                         .minimumScaleFactor(0.5)
                 }
                 .padding()
+                .gesture(
+                    DragGesture()
+                        .onChanged{ _ in
+                            calculatorModel.dragNumberEditing()
+                            calculatorModel.isDrag = true
+                        }
+                        .onEnded { _ in
+                            calculatorModel.isDrag = false
+                        }
+                )
                 
                 VStack {
                     CalculatorView()
