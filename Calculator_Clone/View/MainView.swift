@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @EnvironmentObject var calculatorData: CalculatorData
+    @EnvironmentObject var calculatorModel: CalculatorModel
     
     var body: some View {
         ZStack{
@@ -18,7 +18,7 @@ struct MainView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Text(calculatorData.valueText)
+                    Text(calculatorModel.valueText)
                         .foregroundColor(.white)
                         .font(.system(size: 95))
                         .fontWeight(.light)

@@ -20,20 +20,20 @@ enum CalculatorButton: String{
     case eight = "8"
     case nine = "9"
     case dot = "."
-    case plus = "plus"
-    case minus = "minus"
-    case multiple = "multiple"
-    case divide = "divide"
+    case plus = "+"
+    case minus = "-"
+    case multiple = "*"
+    case divide = "/"
     case clear = "AC"
-    case equal = "equal"
-    case modular = "modular"
+    case equal = "="
+    case percent = "%"
     case negative = "negative"
     
     var buttonColor: Color {
         switch self {
         case .divide, .multiple, .minus, .plus, .equal:
             return .orange
-        case .clear, .negative, .modular:
+        case .clear, .negative, .percent:
             return Color.calcuButtonColor
         default:
             return Color.numberButtonColor
@@ -44,7 +44,7 @@ enum CalculatorButton: String{
         switch self {
         case .divide, .equal, .plus, .minus, .multiple:
             return Color.arithmeticClickedButtonColor
-        case .negative, .modular, .clear:
+        case .negative, .percent, .clear:
             return Color.calcuClickedButtonColor
         default:
             return Color.numberClickedButtonColor

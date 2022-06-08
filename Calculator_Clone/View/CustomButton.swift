@@ -64,7 +64,7 @@ struct CustomButton: ButtonStyle {
     // 버튼 내부 텍스트를 설정하는 함수
     func buttonTextColor(_ item: CalculatorButton) -> Color {
         switch item {
-        case .clear, .negative, .modular:
+        case .clear, .negative, .percent:
             return .black
         default:
             return .white
@@ -74,7 +74,7 @@ struct CustomButton: ButtonStyle {
     // 버튼내부 텍스트의 폰트 사이즈 설정하는 함수
     func calcuFontSize(_ item: CalculatorButton) -> CGFloat {
         switch item {
-        case .negative, .modular:
+        case .negative, .percent:
             return 30
         case .clear, .divide, .multiple, .minus, .plus, .equal:
             return 35
@@ -86,7 +86,7 @@ struct CustomButton: ButtonStyle {
     // 버튼내부 텍스트의 폰트 굵기 설정하는 함수
     func calcuFontWeight(_ item: CalculatorButton) -> Font.Weight {
         switch item {
-        case .negative, .modular, .clear:
+        case .negative, .percent, .clear:
             return .medium
         case .divide, .multiple, .minus, .plus, .equal:
             return .semibold
