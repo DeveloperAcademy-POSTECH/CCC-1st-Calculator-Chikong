@@ -17,6 +17,8 @@ class CalculatorModel: ObservableObject {
     @Published var isEqual = false
     @Published var oper: String = ""
     
+    var fomulaStack = [Any]()
+    
     var numStack = [Double]()
     var number: Double = 0
     var opStack = ""
@@ -25,6 +27,68 @@ class CalculatorModel: ObservableObject {
     var currentOp = ""
     
     private var numberFormatter = NumberFormatter()
+    
+    func calcuPostfix(_ fomula: [Any]) {
+
+        var answer = [Double]()
+        
+        for op in fomula {
+            switch op as? Character {
+            case "*":
+                answer.append(answer.removeLast() * answer.removeLast())
+            case "/":
+                let stackLast = answer.removeLast()
+                answer.append(answer.removeLast() / stackLast)
+            case "+":
+                answer.append(answer.removeLast() + answer.removeLast())
+            case "-":
+                let stackLast = answer.removeLast()
+                answer.append(answer.removeLast() - stackLast)
+            default:
+                answer.append(op as! Double)
+            }
+        }
+        numStack.append(answer.first!)
+        updateText(answer.first!)
+    }
+    
+    func setPostfix() {
+        currentOp = String(opStack.last ?? "+")
+        
+        fomulaStack = []
+        
+        while !numStack.isEmpty {
+            fomulaStack.append(numStack.removeFirst())
+            if !opStack.isEmpty {
+                fomulaStack.append(opStack.removeFirst())
+            }
+        }
+        var tempStack = [Any]()
+        var postfix = [Any]()
+        
+        for op in fomulaStack {
+            switch op as? Character {
+            case "*", "/":
+                while !tempStack.isEmpty && (tempStack.last as? String == "*" || tempStack.last as? String == "/") {
+                    postfix.append(tempStack.removeLast())
+                }
+                tempStack.append(op)
+            case "+", "-":
+                while !tempStack.isEmpty{
+                    postfix.append(tempStack.removeLast())
+                }
+                tempStack.append(op)
+            default:
+                postfix.append(op)
+            }
+        }
+        
+        while !tempStack.isEmpty {
+            postfix.append(tempStack.removeLast())
+        }
+        
+        calcuPostfix(postfix)
+    }
     
     /// AC 버튼 클릭
     func setClear() {
@@ -37,9 +101,10 @@ class CalculatorModel: ObservableObject {
         isNegative = false
         isDot = false
         opCheck = false
-        currentOp = ""
         errorCheck = false
         isEqual = false
+        fomulaStack = [Any]()
+        currentOp = ""
     }
     
     // number 와 op 스택 추가 및 초기화 함수
@@ -51,7 +116,6 @@ class CalculatorModel: ObservableObject {
         
         dotCheckNumber = 10
         self.number = 0
-        self.currentOp = self.oper
         self.oper = ""
     }
     
@@ -69,7 +133,6 @@ class CalculatorModel: ObservableObject {
         }
         
         dotCheckNumber *= 10
-        preCalcu()
         updateText(self.number)
     }
     
@@ -86,23 +149,7 @@ class CalculatorModel: ObservableObject {
             self.number = (self.number * 10) + (Double(number.rawValue)!)
         }
         
-        preCalcu()
         updateText(self.number)
-    }
-    
-    /// 곱셈 및 나눗셈 우선 처리
-    func preCalcu() {
-        guard opStack.last == "*" || opStack == "/" else { return }
-        
-        self.currentOp = String(opStack.removeLast())
-        
-        switch self.currentOp {
-        case "*":
-            numStack.append(numStack.removeLast() * self.number)
-        default:
-            if self.number == 0 { self.errorCheck = true; return }
-            numStack.append(numStack.removeLast() / self.number)
-        }
     }
     
     /// 연산자 [ +, -, x, / ] 버튼 클릭 처리 함수
@@ -122,33 +169,12 @@ class CalculatorModel: ObservableObject {
     
     /// '=' 버튼 클릭 처리 함수
     func clickedEqualButton() {
-        guard !numStack.isEmpty else { return }
-        
-        if currentOp == "+" || currentOp == "-" {
-            numStack.append(self.number)
-        }
-        
         if !self.oper.isEmpty { opStack += self.oper }
-        else { opStack += self.currentOp }
+        numStack.append(self.number)
         
-        while opStack.count != 1 {
-            switch opStack.removeFirst() {
-            case "*":
-                numStack.append(numStack.removeFirst() * numStack.removeFirst())
-            case "/":
-                numStack.append(numStack.removeFirst() / numStack.removeFirst())
-            case "+":
-                numStack.append(numStack.removeFirst() + numStack.removeFirst())
-            default:
-                numStack.append(numStack.removeFirst() - numStack.removeFirst())
-            }
-        }
-        
-        if currentOp == "*" || currentOp == "/" {
-            numStack.append(self.number)
-        }
+        setPostfix()
+        opStack += currentOp
         self.isEqual = true
-        updateText(numStack.first!)
     }
     
     /// . 클릭 처리 함수
@@ -204,7 +230,7 @@ class CalculatorModel: ObservableObject {
     
     func dragNumberEditing() {
         guard !self.isDrag && !self.isEqual else { return }
-    
+        
         var removeFomatterNum = valueText.filter { item in
             return item != ","
         }
